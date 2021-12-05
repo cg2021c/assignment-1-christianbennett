@@ -444,7 +444,7 @@ let uModel = gl.getUniformLocation(program,`uModel`);
 let modelMatrix = glMatrix.mat4.create();
 
 function animate() {
- glMatrix.mat4.rotateY(modelMatrix,modelMatrix,Math.PI / 2 / 70);   
+//  glMatrix.mat4.rotateY(modelMatrix,modelMatrix,Math.PI / 2 / 70);   
 
  gl.uniformMatrix4fv(uModel,false,modelMatrix);
 
