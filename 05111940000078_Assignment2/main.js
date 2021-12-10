@@ -370,53 +370,53 @@ glMatrix.mat4.lookAt(
 );
 gl.uniformMatrix4fv(uViewMetal, false, viewMatrixMetal);
 
-function onKeydown(event) {
-  //Left
-  if (event.keyCode == 37) cameraX -= 0.065; 
-  //Right
-  if (event.keyCode == 39) cameraX += 0.065;
-  //Up 
-  if (event.keyCode == 38) {
-    lightY += 0.065; 
-    for (let i = 0; i < vertexData.length; i += 9) {
-      if (vertexData[i] <= 0.065 && vertexData[i] >= -0.065 && vertexData[i + 2] <= 0.065 && vertexData[i + 2] >= -0.065) {
-        vertexData[i + 1] += 0.065;
-      }
-    }
-    for (let i = 0; i < vertexDataMetal.length; i += 9) {
-      if (vertexDataMetal[i] <= 0.065 && vertexDataMetal[i] >= -0.065 && vertexDataMetal[i + 2] <= 0.065 && vertexDataMetal[i + 2] >= -0.065) {
-        vertexDataMetal[i + 1] += 0.065;
-      }
-    }
-  }
-  //Down
-  if (event.keyCode == 40) {
-    lightY -= 0.065; 
-    for (let i = 0; i < vertexData.length; i += 9) {
-      if (vertexData[i] <= 0.065 && vertexData[i] >= -0.065 && vertexData[i + 2] <= 0.065 && vertexData[i + 2] >= -0.065) {
-        vertexData[i + 1] -= 0.065;
-      }
-    }
-    for (let i = 0; i < vertexDataMetal.length; i += 9) {
-      if (vertexDataMetal[i] <= 0.065 && vertexDataMetal[i] >= -0.065 && vertexDataMetal[i + 2] <= 0.065 && vertexDataMetal[i + 2] >= -0.065) {
-        vertexDataMetal[i + 1] -= 0.065;
-      }
-    }
-  }
+// function onKeydown(event) {
+//   //Left
+//   if (event.keyCode == 37) cameraX -= 0.065; 
+//   //Right
+//   if (event.keyCode == 39) cameraX += 0.065;
+//   //Up 
+//   if (event.keyCode == 38) {
+//     lightY += 0.065; 
+//     for (let i = 0; i < vertexData.length; i += 9) {
+//       if (vertexData[i] <= 0.065 && vertexData[i] >= -0.065 && vertexData[i + 2] <= 0.065 && vertexData[i + 2] >= -0.065) {
+//         vertexData[i + 1] += 0.065;
+//       }
+//     }
+//     for (let i = 0; i < vertexDataMetal.length; i += 9) {
+//       if (vertexDataMetal[i] <= 0.065 && vertexDataMetal[i] >= -0.065 && vertexDataMetal[i + 2] <= 0.065 && vertexDataMetal[i + 2] >= -0.065) {
+//         vertexDataMetal[i + 1] += 0.065;
+//       }
+//     }
+//   }
+//   //Down
+//   if (event.keyCode == 40) {
+//     lightY -= 0.065; 
+//     for (let i = 0; i < vertexData.length; i += 9) {
+//       if (vertexData[i] <= 0.065 && vertexData[i] >= -0.065 && vertexData[i + 2] <= 0.065 && vertexData[i + 2] >= -0.065) {
+//         vertexData[i + 1] -= 0.065;
+//       }
+//     }
+//     for (let i = 0; i < vertexDataMetal.length; i += 9) {
+//       if (vertexDataMetal[i] <= 0.065 && vertexDataMetal[i] >= -0.065 && vertexDataMetal[i + 2] <= 0.065 && vertexDataMetal[i + 2] >= -0.065) {
+//         vertexDataMetal[i + 1] -= 0.065;
+//       }
+//     }
+//   }
 
-  glMatrix.mat4.lookAt(
-    viewMatrix,
-    [cameraX, cameraY, cameraZ],
-    [cameraX, 0.0, -10],
-    [0.0, 1.0, 0.0]
-  );
-  glMatrix.mat4.lookAt(
-    viewMatrixMetal,
-    [cameraX, cameraY, cameraZ],
-    [cameraX, 0.0, -10],
-    [0.0, 1.0, 0.0]
-  );
-}
+//   glMatrix.mat4.lookAt(
+//     viewMatrix,
+//     [cameraX, cameraY, cameraZ],
+//     [cameraX, 0.0, -10],
+//     [0.0, 1.0, 0.0]
+//   );
+//   glMatrix.mat4.lookAt(
+//     viewMatrixMetal,
+//     [cameraX, cameraY, cameraZ],
+//     [cameraX, 0.0, -10],
+//     [0.0, 1.0, 0.0]
+//   );
+// }
 
 let modelMatrix = glMatrix.mat4.create();
 let modelMatrixMetal = glMatrix.mat4.create();
