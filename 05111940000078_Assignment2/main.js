@@ -367,81 +367,43 @@ let lightY = 0.0;
 let lightZ = 0.0;
 
 gl.useProgram(shaderProgram);
-let uView = gl.getUniformLocation(shaderProgram,"uView");
-let uLightPosition = gl.getUniformLocation(shaderProgram,"uLightPosition");
+let uView = gl.getUniformLocation(shaderProgram, "uView");
+let uLightPosition = gl.getUniformLocation(shaderProgram, "uLightPosition");
 let viewMatrix = glMatrix.mat4.create();
 glMatrix.mat4.lookAt(
   viewMatrix,
-  [cameraX,cameraY,cameraZ],
-  [cameraX,0.0,-10],
-  [0.0,1.0,0.0]
+  [cameraX, cameraY, cameraZ],
+  [cameraX, 0.0, -10],
+  [0.0, 1.0, 0.0]
 );
-gl.uniformMatrix4fv(uView,false,viewMatrix);
+gl.uniformMatrix4fv(uView, false, viewMatrix);
 
 gl.useProgram(shaderProgramMetal);
-let uViewMetal = gl.getUniformLocation(shaderProgramMetal,"uView");
-let uLightPositionMetal = gl.getUniformLocation(shaderProgramMetal,"uLightPosition");
+let uViewMetal = gl.getUniformLocation(shaderProgramMetal, "uView");
+let uLightPositionMetal = gl.getUniformLocation(shaderProgramMetal, "uLightPosition");
 let viewMatrixMetal = glMatrix.mat4.create();
 glMatrix.mat4.lookAt(
   viewMatrixMetal,
-  [cameraX,cameraY,cameraZ],
-  [cameraX,0.0,-10],
-  [0.0,1.0,0.0]
+  [cameraX, cameraY, cameraZ],
+  [cameraX, 0.0, -10],
+  [0.0, 1.0, 0.0]
 );
-gl.uniformMatrix4fv(uViewMetal,false,viewMatrixMetal);
+gl.uniformMatrix4fv(uViewMetal, false, viewMatrixMetal);
 
-// function onKeydown(event) {
-//   //Left
-//   if (event.keyCode == 37) cameraX -= 0.065; 
-//   //Right
-//   if (event.keyCode == 39) cameraX += 0.065;
-//   //Up 
-//   if (event.keyCode == 38) {
-//     lightY += 0.065; 
-//     for (let i = 0; i < vertexData.length; i += 9) {
-//       if (vertexData[i] <= 0.065 && vertexData[i] >= -0.065 && vertexData[i + 2] <= 0.065 && vertexData[i + 2] >= -0.065) {
-//         vertexData[i + 1] += 0.065;
-//       }
-//     }
-//     for (let i = 0; i < vertexDataMetal.length; i += 9) {
-//       if (vertexDataMetal[i] <= 0.065 && vertexDataMetal[i] >= -0.065 && vertexDataMetal[i + 2] <= 0.065 && vertexDataMetal[i + 2] >= -0.065) {
-//         vertexDataMetal[i + 1] += 0.065;
-//       }
-//     }
-//   }
-//   //Down
-//   if (event.keyCode == 40) {
-//     lightY -= 0.065; 
-//     for (let i = 0; i < vertexData.length; i += 9) {
-//       if (vertexData[i] <= 0.065 && vertexData[i] >= -0.065 && vertexData[i + 2] <= 0.065 && vertexData[i + 2] >= -0.065) {
-//         vertexData[i + 1] -= 0.065;
-//       }
-//     }
-//     for (let i = 0; i < vertexDataMetal.length; i += 9) {
-//       if (vertexDataMetal[i] <= 0.065 && vertexDataMetal[i] >= -0.065 && vertexDataMetal[i + 2] <= 0.065 && vertexDataMetal[i + 2] >= -0.065) {
-//         vertexDataMetal[i + 1] -= 0.065;
-//       }
-//     }
-//   }
+let lightSwitch = true
 
-//   glMatrix.mat4.lookAt(
-//     viewMatrix,
-//     [cameraX,cameraY,cameraZ],
-//     [cameraX,0.0,-10],
-//     [0.0,1.0,0.0]
-//   );
-//   glMatrix.mat4.lookAt(
-//     viewMatrixMetal,
-//     [cameraX,cameraY,cameraZ],
-//     [cameraX,0.0,-10],
-//     [0.0,1.0,0.0]
-//   );
-// }
+function onKeydown(event) {
+
+  if (event.keyCode == 32) {
+    lightSwitch = !lightSwitch;
+  }
+
+}
 
 let modelMatrix = glMatrix.mat4.create();
 let modelMatrixMetal = glMatrix.mat4.create();
 
-// document.addEventListener("keydown",onKeydown);
+document.addEventListener("keydown",onKeydown);
 
 function renderProgram(currShader,currVertice,isMetal) {
 
@@ -501,44 +463,50 @@ function renderProgram(currShader,currVertice,isMetal) {
   gl.uniform1f(uAmbientIntensity,0.278);
 
   // DIFFUSE
-  let uDiffuseConstant = gl.getUniformLocation(currShader,"uDiffuseConstant");
-  let uNormalModel = gl.getUniformLocation(currShader,"uNormalModel");
-  gl.uniform3fv(uDiffuseConstant,[1.0,1.0,1.0]);
-  if (isMetal)
-    gl.uniform3fv(uLightPositionMetal,[lightX,lightY,lightZ]);
+  let uDiffuseConstant = gl.getUniformLocation(currShader, "uDiffuseConstant");
+  let uNormalModel = gl.getUniformLocation(currShader, "uNormalModel");
+  if (lightSwitch)
+    gl.uniform3fv(uDiffuseConstant, [1.0, 1.0, 1.0]);
   else
-    gl.uniform3fv(uLightPosition,[lightX,lightY,lightZ])
+    gl.uniform3fv(uDiffuseConstant, [0.0, 0.0, 0.0]);
 
-  let uProjection = gl.getUniformLocation(currShader,"uProjection");
+  if (isMetal)
+    gl.uniform3fv(uLightPositionMetal, [lightX, lightY, lightZ]);
+  else
+    gl.uniform3fv(uLightPosition, [lightX, lightY, lightZ])
+
+  let uProjection = gl.getUniformLocation(currShader, "uProjection");
   let perspectiveMatrix = glMatrix.mat4.create();
-  glMatrix.mat4.perspective(perspectiveMatrix,Math.PI / 3,1.0,0.5,10.0);
-  gl.uniformMatrix4fv(uProjection,false,perspectiveMatrix);
+  glMatrix.mat4.perspective(perspectiveMatrix, Math.PI / 3, 1.0, 0.5, 10.0);
+  gl.uniformMatrix4fv(uProjection, false, perspectiveMatrix);
 
   // SPECULAR
-  var uSpecularConstant = gl.getUniformLocation(currShader,"uSpecularConstant");
-  var uViewerPosition = gl.getUniformLocation(currShader,"uViewerPosition");
-  gl.uniform3fv(uSpecularConstant,[1.0,1.0,1.0]);  
-  gl.uniform3fv(uViewerPosition,[cameraX,cameraY,cameraZ]);
+  var uSpecularConstant = gl.getUniformLocation(currShader, "uSpecularConstant");
+  var uViewerPosition = gl.getUniformLocation(currShader, "uViewerPosition");
+  if (lightSwitch)
+    gl.uniform3fv(uSpecularConstant, [1.0, 1.0, 1.0]);
+  else
+    gl.uniform3fv(uSpecularConstant, [0.0, 0.0, 0.0]);
 
-  let uModel = gl.getUniformLocation(currShader,`uModel`);
+  gl.uniform3fv(uViewerPosition, [cameraX, cameraY, cameraZ]);
+
+  let uModel = gl.getUniformLocation(currShader, `uModel`);
 
   if (isMetal) {
-    gl.uniformMatrix4fv(uModel,false,modelMatrixMetal);
+    gl.uniformMatrix4fv(uModel, false, modelMatrixMetal);
 
     let normalModelMatrix = glMatrix.mat3.create();
-    glMatrix.mat3.normalFromMat4(normalModelMatrix,modelMatrixMetal);
-    gl.uniformMatrix3fv(uNormalModel,false,normalModelMatrix);
-  } 
-  else {
-    gl.uniformMatrix4fv(uModel,false,modelMatrix);
-
+    glMatrix.mat3.normalFromMat4(normalModelMatrix, modelMatrixMetal);
+    gl.uniformMatrix3fv(uNormalModel, false, normalModelMatrix);
+  } else {
+    gl.uniformMatrix4fv(uModel, false, modelMatrix);
     let normalModelMatrix = glMatrix.mat3.create();
-    glMatrix.mat3.normalFromMat4(normalModelMatrix,modelMatrix);
-    gl.uniformMatrix3fv(uNormalModel,false,normalModelMatrix);
+    glMatrix.mat3.normalFromMat4(normalModelMatrix, modelMatrix);
+    gl.uniformMatrix3fv(uNormalModel, false, normalModelMatrix);
   }
 
   gl.enable(gl.DEPTH_TEST);
-  gl.drawArrays(gl.TRIANGLES,0,vertexData.length / 9);
+  gl.drawArrays(gl.TRIANGLES, 0, vertexData.length / 9);
 }
 
 function animate() {
